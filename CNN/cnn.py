@@ -1,7 +1,14 @@
+'''
+Basic CNN implementation that will blur the image. default kernel works only for small images.
+
+TODO: parallelize for loop for different color channels
+
+'''
+
 from PIL import Image
 import numpy as np
 import matplotlib.pyplot as plt
-
+import os
 
 def splitter(pixelArray, kernel):
     rPixel = np.array(pixelArray[:, :, 0])
@@ -55,7 +62,30 @@ def convolution(input, kernel):
     return output
 
 
-img = Image.open("./dog.jpg")
+def fileHandling():
+    directory_path = "../CNN/image"
+    file_list = os.listdir(directory_path)
+    file_count = len(file_list)
+    if file_count==0:
+        print("Please paste your image in image folder")
+        exit(1)
+    elif file_count==1:
+        file_name = file_list[0]
+        return file_name
+    elif file_count>1:
+        fileName = input("Multiple images found. Please input the name of image: ")
+        file_path = os.path.join(directory_path, fileName)
+        if os.path.exists(file_path):
+            print("File exists.")
+            return fileName
+        else:
+            print("File not found")
+            exit(1)
+
+fileName = fileHandling()
+fileDir = "./image/"+fileName
+img = Image.open(fileDir)
+
 pixedData = list(img.getdata())
 pixelArray = np.array(pixedData)
 blurKernel = np.array(
@@ -69,8 +99,5 @@ blurKernel = np.array(
 w, h = img.size
 pixelArray = pixelArray.reshape(h, w, 3)
 
-
 splitter(pixelArray, blurKernel)
 
-
-# print(rPixel.shape, pixelArray.shape)
