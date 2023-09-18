@@ -1,3 +1,4 @@
 .vscode/***
 venv/
-/CNN/image/***
+CNN/Assets/image/***
+/CNN/__pycache__/***
